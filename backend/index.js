@@ -187,14 +187,11 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     let sanitizedText = responseText.trim();
     
-    // Fallback pembersihan tag markdown jika ada
-    if (sanitizedText.startsWith("```json")) {
-      sanitizedText = sanitizedText.substring(7);
-    } else if (sanitizedText.startsWith("```")) {
-      sanitizedText = sanitizedText.substring(3);
-    }
-    if (sanitizedText.endsWith("```")) {
-      sanitizedText = sanitizedText.substring(0, sanitizedText.length - 3);
+    // Extract JSON object from first '{' to last '}'
+    const firstBrace = sanitizedText.indexOf('{');
+    const lastBrace = sanitizedText.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      sanitizedText = sanitizedText.substring(firstBrace, lastBrace + 1);
     }
 
     let quizData;
@@ -202,7 +199,7 @@ app.post('/api/generate-quiz', async (req, res) => {
       quizData = JSON.parse(sanitizedText.trim());
     } catch (parseErr) {
       console.warn('[PrepMaster API] Direct JSON.parse failed, cleaning trailing commas/control chars...', parseErr.message);
-      const cleanedJSON = sanitizedText
+      let cleanedJSON = sanitizedText
         .trim()
         .replace(/,\s*([\]}])/g, '$1')
         .replace(/[\u0000-\u001F\u007F-\u009F]/g, (match) => {
@@ -211,6 +208,13 @@ app.post('/api/generate-quiz', async (req, res) => {
           if (match === '\t') return '\\t';
           return '';
         });
+
+      const fBrace = cleanedJSON.indexOf('{');
+      const lBrace = cleanedJSON.lastIndexOf('}');
+      if (fBrace !== -1 && lBrace !== -1 && lBrace > fBrace) {
+        cleanedJSON = cleanedJSON.substring(fBrace, lBrace + 1);
+      }
+
       quizData = JSON.parse(cleanedJSON);
     }
     return res.json(quizData);
