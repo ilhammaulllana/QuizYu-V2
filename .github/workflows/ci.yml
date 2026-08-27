@@ -86,3 +86,25 @@ jobs:
       - name: 🔍 Check Node.js Code Syntax
         working-directory: ./backend
         run: node -c index.js
+
+  # =========================================================================
+  # JOB 3: Continuous Deployment (CD) untuk Backend ke Cloud
+  # Job ini hanya akan berjalan JIKA Job CI (flutter-ci & backend-ci) LULUS!
+  # =========================================================================
+  backend-deploy:
+    name: 🌐 Node.js Backend CD (Trigger Cloud Deploy)
+    needs: [flutter-ci, backend-ci]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: 🚀 Trigger Cloud Deployment
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Mengirim sinyal CD Deployment ke Cloud Server..."
+            curl -X POST "$RENDER_DEPLOY_HOOK_URL"
+          else
+            echo "ℹ️ INFO CD: Secret RENDER_DEPLOY_HOOK_URL belum dipasang di GitHub Secrets. Tambahkan secret ini saat siap merilis ke server Cloud publik!"
+          fi
