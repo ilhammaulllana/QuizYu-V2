@@ -11,7 +11,7 @@ void main() {
       ),
     );
 
-    // [EKSPERIMEN CI/CD]: Kode sengaja disalahkan untuk menguji GitHub Actions CI
-    expect(find.text('Teks Ini Pasti Error Dan Tidak Ada In Aplikasi'), findsOneWidget);
+    // Verify that the landing page text is found.
+    expect(find.text('Belajar Apa Hari Ini?'), findsOneWidget);
   });
 }
