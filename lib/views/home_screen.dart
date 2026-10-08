@@ -36,7 +36,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           backgroundColor: Theme.of(context).colorScheme.error,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           margin: const EdgeInsets.all(16),
         ),
       );
@@ -69,12 +71,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     }
 
-    ref.read(quizProvider.notifier).startQuiz(
-      topic: query,
-      count: count,
-      difficulty: settings.difficulty,
-      modelVersion: settings.modelVersion,
-    );
+    ref
+        .read(quizProvider.notifier)
+        .startQuiz(
+          topic: query,
+          count: count,
+          difficulty: settings.difficulty,
+          modelVersion: settings.modelVersion,
+        );
   }
 
   @override
@@ -90,7 +94,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     // Responsive values
     final double horizontalPadding = isDesktop ? 0 : (isTablet ? 48.0 : 24.0);
-    final double maxContentWidth = isDesktop ? 560.0 : (isTablet ? 560.0 : double.infinity);
+    final double maxContentWidth = isDesktop
+        ? 560.0
+        : (isTablet ? 560.0 : double.infinity);
     final double titleFontSize = isDesktop ? 40.0 : (isTablet ? 34.0 : 28.0);
     final double subtitleFontSize = isDesktop ? 18.0 : (isTablet ? 16.0 : 14.0);
     final double logoSize = isDesktop ? 48.0 : (isTablet ? 40.0 : 32.0);
@@ -157,7 +163,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   : theme.colorScheme.error,
               behavior: SnackBarBehavior.floating,
               duration: const Duration(seconds: 5),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               margin: const EdgeInsets.all(16),
               action: SnackBarAction(
                 label: 'Coba Lagi',
@@ -202,68 +210,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // ---- LOGO (kiri) ----
-                            Row(
-                              children: [
-                                Container(
-                                  width: logoSize,
-                                  height: logoSize,
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF7C3AED).withValues(alpha: 0.3),
-                                        blurRadius: 12,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Icon(
-                                    Icons.auto_stories_rounded,
-                                    color: Colors.white,
-                                    size: logoIconSize,
-                                  ),
+                            // ---- TEXT LOGO (kiri) ----
+                            ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
+                              ).createShader(bounds),
+                              child: Text(
+                                'QuizYu',
+                                style: TextStyle(
+                                  fontSize: logoTextSize,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5,
                                 ),
-                                const SizedBox(width: 10),
-                                ShaderMask(
-                                  shaderCallback: (bounds) => const LinearGradient(
-                                    colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
-                                  ).createShader(bounds),
-                                  child: Text(
-                                    'quizyu',
-                                    style: TextStyle(
-                                      fontSize: logoTextSize,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
 
-                            // ---- NAV ITEMS (kanan, hanya desktop/tablet) ----
-                            if (!isMobile)
-                              Row(
-                                children: [
-                                  _buildNavChip(
-                                    icon: Icons.flash_on_rounded,
-                                    label: 'Kuis AI',
-                                    color: const Color(0xFF7C3AED),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  _buildNavChip(
-                                    icon: Icons.bar_chart_rounded,
-                                    label: 'Analisis',
-                                    color: const Color(0xFF6366F1),
+                            // ---- LOGO ICON (kanan) ----
+                            Container(
+                              width: logoSize,
+                              height: logoSize,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF7C3AED),
+                                    Color(0xFF6366F1),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(
+                                      0xFF7C3AED,
+                                    ).withValues(alpha: 0.3),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
+                              child: Icon(
+                                Icons.auto_stories_rounded,
+                                color: Colors.white,
+                                size: logoIconSize,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -280,18 +272,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                         child: Center(
                           child: ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: maxContentWidth),
+                            constraints: BoxConstraints(
+                              maxWidth: maxContentWidth,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 // ---- BADGE ----
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 6,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF7C3AED).withValues(alpha: 0.08),
+                                    color: const Color(
+                                      0xFF7C3AED,
+                                    ).withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(20),
                                     border: Border.all(
-                                      color: const Color(0xFF7C3AED).withValues(alpha: 0.2),
+                                      color: const Color(
+                                        0xFF7C3AED,
+                                      ).withValues(alpha: 0.2),
                                       width: 1,
                                     ),
                                   ),
@@ -352,12 +353,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0xFF7C3AED).withValues(alpha: 0.08),
+                                        color: const Color(
+                                          0xFF7C3AED,
+                                        ).withValues(alpha: 0.08),
                                         blurRadius: 24,
                                         offset: const Offset(0, 8),
                                       ),
                                       BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.04),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.04,
+                                        ),
                                         blurRadius: 8,
                                         offset: const Offset(0, 2),
                                       ),
@@ -374,37 +379,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       color: const Color(0xFF0F172A),
                                     ),
                                     decoration: InputDecoration(
-                                      hintText: 'Misal: "Tata Surya 10 soal", "Logika Dasar"...',
-                                      hintStyle: const TextStyle(color: Color(0xFFADB5BD)),
+                                      hintText:
+                                          'Misal: "Python Dasar 10 soal", "Logika Dasar"...',
+                                      hintStyle: const TextStyle(
+                                        color: Color(0xFFADB5BD),
+                                      ),
                                       fillColor: Colors.white,
                                       filled: true,
                                       prefixIcon: const Padding(
-                                        padding: EdgeInsets.only(left: 16, right: 8),
+                                        padding: EdgeInsets.only(
+                                          left: 16,
+                                          right: 8,
+                                        ),
                                         child: Icon(
                                           Icons.search_rounded,
                                           color: Color(0xFF7C3AED),
                                           size: 22,
                                         ),
                                       ),
-                                      prefixIconConstraints: const BoxConstraints(minWidth: 48),
+                                      prefixIconConstraints:
+                                          const BoxConstraints(minWidth: 48),
                                       suffixIcon: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: GestureDetector(
-                                          onTap: () => _submitQuery(_searchController.text),
+                                          onTap: () => _submitQuery(
+                                            _searchController.text,
+                                          ),
                                           child: Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 8,
+                                            ),
                                             decoration: BoxDecoration(
                                               gradient: const LinearGradient(
-                                                colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
+                                                colors: [
+                                                  Color(0xFF7C3AED),
+                                                  Color(0xFF6366F1),
+                                                ],
                                                 begin: Alignment.topLeft,
                                                 end: Alignment.bottomRight,
                                               ),
-                                              borderRadius: BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                             ),
                                             child: const Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 14),
                                                 SizedBox(width: 6),
                                                 Text(
                                                   'Buat Kuis',
@@ -421,13 +441,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(18),
-                                        borderSide: const BorderSide(color: Color(0xFFE8E8F0), width: 1.5),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFE8E8F0),
+                                          width: 1.5,
+                                        ),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(18),
-                                        borderSide: const BorderSide(color: Color(0xFF7C3AED), width: 2),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFF7C3AED),
+                                          width: 2,
+                                        ),
                                       ),
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 20,
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -440,46 +470,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFF8F9FF),
                                     borderRadius: BorderRadius.circular(14),
-                                    border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+                                    border: Border.all(
+                                      color: const Color(0xFFE2E8F0),
+                                      width: 1,
+                                    ),
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       _buildModelPill(
                                         label: 'Gemini Standard',
-                                        isSelected: settings.modelVersion == 'Standard',
+                                        isSelected:
+                                            settings.modelVersion == 'Standard',
                                         icon: Icons.flash_on_rounded,
                                         activeColor: const Color(0xFF6366F1),
                                         onTap: () {
-                                          ref.read(settingsProvider.notifier).setModelVersion('Standard');
+                                          ref
+                                              .read(settingsProvider.notifier)
+                                              .setModelVersion('Standard');
                                         },
                                       ),
                                       const SizedBox(width: 4),
                                       _buildModelPill(
                                         label: 'Gemini Pro',
-                                        isSelected: settings.modelVersion == 'Pro',
+                                        isSelected:
+                                            settings.modelVersion == 'Pro',
                                         icon: Icons.stars_rounded,
                                         activeColor: const Color(0xFF7C3AED),
                                         onTap: () {
-                                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
                                             SnackBar(
                                               content: const Row(
                                                 children: [
-                                                  Icon(Icons.stars_rounded, color: Colors.white),
+                                                  Icon(
+                                                    Icons.stars_rounded,
+                                                    color: Colors.white,
+                                                  ),
                                                   SizedBox(width: 12),
                                                   Expanded(
                                                     child: Text(
                                                       'Fitur Gemini Pro belum tersedia saat ini.',
-                                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 14,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                              backgroundColor: const Color(0xFF7C3AED),
-                                              behavior: SnackBarBehavior.floating,
-                                              duration: const Duration(seconds: 3),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                              backgroundColor: const Color(
+                                                0xFF7C3AED,
+                                              ),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              duration: const Duration(
+                                                seconds: 3,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
                                               margin: const EdgeInsets.all(16),
                                             ),
                                           );
@@ -557,36 +613,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // ---- NAV CHIP ----
-  Widget _buildNavChip({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.15), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: color),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // ---- MODEL PILL ----
   Widget _buildModelPill({

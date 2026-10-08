@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/quiz_session.dart';
 import '../services/api_service.dart';
+import '../services/mock_data.dart';
 
 class StudyGuideNotifier extends StateNotifier<AsyncValue<String?>> {
   StudyGuideNotifier() : super(const AsyncValue.data(null));
@@ -25,6 +26,21 @@ class StudyGuideNotifier extends StateNotifier<AsyncValue<String?>> {
 
       state = AsyncValue.data(markdown);
     } catch (e, stack) {
+      try {
+        final incorrectQuestions = session.questions.where((q) {
+          final index = session.questions.indexOf(q);
+          final selectedAnswer = session.selectedAnswers[index];
+          return selectedAnswer != q.correctAnswerIndex;
+        }).toList();
+
+        final fallbackMarkdown = await MockDataService.generateStudyGuide(
+          topic: session.topic,
+          incorrectQuestions: incorrectQuestions,
+        );
+        state = AsyncValue.data(fallbackMarkdown);
+        return;
+      } catch (_) {}
+
       state = AsyncValue.error('Gagal membuat panduan belajar: $e', stack);
     }
   }

@@ -55,10 +55,29 @@ class MockDataService {
       questions.addAll(extra);
     }
 
+    // Acak urutan pilihan jawaban untuk setiap soal agar tersebar merata (A, B, C, D)
+    final randomizedQuestions = questions.map((q) {
+      final options = List<String>.from(q['options'] ?? []);
+      final rawIndex = q['correct_answer_index'] as int? ?? 0;
+      if (options.length <= 1) return q;
+
+      final safeIdx = (rawIndex >= 0 && rawIndex < options.length) ? rawIndex : 0;
+      final correctText = options[safeIdx];
+
+      final shuffled = List<String>.from(options)..shuffle(_random);
+      final newIndex = shuffled.indexOf(correctText);
+
+      return {
+        ...q,
+        'options': shuffled,
+        'correct_answer_index': newIndex != -1 ? newIndex : 0,
+      };
+    }).toList();
+
     return {
       'is_valid': true,
       'topic': topic,
-      'questions': questions,
+      'questions': randomizedQuestions,
     };
   }
 

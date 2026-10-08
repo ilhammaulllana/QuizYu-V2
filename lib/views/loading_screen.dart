@@ -18,7 +18,8 @@ class GorgeousLoadingScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<GorgeousLoadingScreen> createState() => _GorgeousLoadingScreenState();
+  ConsumerState<GorgeousLoadingScreen> createState() =>
+      _GorgeousLoadingScreenState();
 }
 
 class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
@@ -33,14 +34,16 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
   @override
   void initState() {
     super.initState();
-    _loadingMessages = widget.customMessages ?? [
-      'Membangun koneksi dengan Gemini...',
-      'Menganalisis topik Anda...',
-      'Merakit System Prompt kuis...',
-      'Membuat set pertanyaan interaktif...',
-      'Menyusun petunjuk & pembahasan...',
-      'Hampir selesai, memformat jawaban...'
-    ];
+    _loadingMessages =
+        widget.customMessages ??
+        [
+          'Membangun koneksi dengan Gemini...',
+          'Menganalisis topik Anda...',
+          'Merakit System Prompt kuis...',
+          'Membuat set pertanyaan interaktif...',
+          'Menyusun petunjuk & pembahasan...',
+          'Hampir selesai, memformat jawaban...',
+        ];
 
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
@@ -85,7 +88,7 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
           radius: 1.0,
           colors: [
             Color(0xFFEBF5FF), // Subtle blue in the center
-            Colors.white,      // Pure white at the edges
+            Colors.white, // Pure white at the edges
           ],
           stops: [0.0, 0.8],
         ),
@@ -129,13 +132,6 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
                           border: Border.all(
                             color: const Color(0xFFE2E8F0),
                             width: 1.5,
-                          ),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.psychology_rounded,
-                            color: theme.primaryColor,
-                            size: 36,
                           ),
                         ),
                       ),
@@ -197,7 +193,9 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withValues(alpha: 0.3 + (index * 0.2)),
+                    color: theme.primaryColor.withValues(
+                      alpha: 0.3 + (index * 0.2),
+                    ),
                     shape: BoxShape.circle,
                   ),
                 );
@@ -209,21 +207,23 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
                 style: OutlinedButton.styleFrom(
                   foregroundColor: const Color(0xFF64748B),
                   side: const BorderSide(color: Color(0xFFCBD5E1), width: 1.2),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: widget.onCancel ?? () {
-                  ref.read(quizProvider.notifier).resetQuiz();
-                },
+                onPressed:
+                    widget.onCancel ??
+                    () {
+                      ref.read(quizProvider.notifier).resetQuiz();
+                    },
                 icon: const Icon(Icons.close_rounded, size: 18),
                 label: const Text(
                   'Batal & Kembali ke Beranda',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
@@ -236,9 +236,6 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
       return content;
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: content,
-    );
+    return Scaffold(backgroundColor: Colors.white, body: content);
   }
 }

@@ -3,6 +3,7 @@ import '../models/quiz_question.dart';
 import '../models/quiz_session.dart';
 import '../models/quiz_settings.dart';
 import '../services/api_service.dart';
+import '../services/mock_data.dart';
 
 class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
   QuizNotifier() : super(const AsyncValue.data(null));
@@ -43,6 +44,33 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
 
       state = AsyncValue.data(session);
     } catch (e, stack) {
+      // Fallback lokal jika backend tidak dapat dihubungi atau mengalami kendala
+      try {
+        final mockResult = await MockDataService.generateQuiz(
+          topic: topic,
+          count: count,
+          difficulty: difficulty,
+        );
+        if (mockResult['is_valid'] == false) {
+          state = AsyncValue.error(mockResult['error_message'] ?? 'Topik tidak valid.', stack);
+          return;
+        }
+        final List<dynamic> questionsJson = mockResult['questions'] ?? [];
+        final questions = questionsJson.asMap().entries.map((entry) {
+          final idx = entry.key;
+          final json = entry.value;
+          return QuizQuestion.fromJson(json, 'q_mock_$idx');
+        }).toList();
+
+        final session = QuizSession(
+          questions: questions,
+          topic: mockResult['topic'] ?? topic,
+        );
+
+        state = AsyncValue.data(session);
+        return;
+      } catch (_) {}
+
       state = AsyncValue.error('Terjadi kesalahan sistem: $e', stack);
     }
   }
@@ -125,19 +153,29 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
         // Let's re-add the incorrect ones but shuffle them or tweak slightly,
         // and pad with brand new questions on the same topic.
         final topic = prevSession.topic;
-        final res = await ApiService().generateQuiz(
-          topic: topic,
-          count: settings.questionCount,
-          difficulty: settings.difficulty,
-          modelVersion: settings.modelVersion,
-        );
+        List<dynamic> rawQuestions = [];
+        try {
+          final res = await ApiService().generateQuiz(
+            topic: topic,
+            count: settings.questionCount,
+            difficulty: settings.difficulty,
+            modelVersion: settings.modelVersion,
+          );
 
-        if (res['is_valid'] == false) {
-          state = AsyncValue.error(res['error_message'] ?? 'Gagal membuat kuis.', StackTrace.current);
-          return;
+          if (res['is_valid'] == false) {
+            state = AsyncValue.error(res['error_message'] ?? 'Gagal membuat kuis.', StackTrace.current);
+            return;
+          }
+          rawQuestions = res['questions'] ?? [];
+        } catch (_) {
+          final mockRes = await MockDataService.generateQuiz(
+            topic: topic,
+            count: settings.questionCount,
+            difficulty: settings.difficulty,
+          );
+          rawQuestions = mockRes['questions'] ?? [];
         }
 
-        final List<dynamic> rawQuestions = res['questions'] ?? [];
         final fetchedQuestions = rawQuestions.asMap().entries.map((entry) {
           return QuizQuestion.fromJson(entry.value, 'q_custom_${entry.key}');
         }).toList();
