@@ -193,6 +193,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
+              // Estimasikan tinggi konten hero (~430px) dan top nav bar (~64px)
+              const double estimatedContentHeight = 430.0;
+              const double navBarHeight = 64.0;
+              final double freeSpace =
+                  constraints.maxHeight - navBarHeight - estimatedContentHeight;
+              final double dynamicPadding =
+                  freeSpace > 0 ? (freeSpace / 2) : 16.0;
+
               return SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: ConstrainedBox(
@@ -261,14 +269,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
 
                       // ===============================================
-                      // HERO CONTENT (Centered, Constrained Width)
+                      // HERO CONTENT (Centered Vertically - Search bar in the middle)
                       // ===============================================
                       Padding(
                         padding: EdgeInsets.only(
                           left: isDesktop ? 0 : horizontalPadding,
                           right: isDesktop ? 0 : horizontalPadding,
-                          top: isDesktop ? 80 : (isTablet ? 60 : 40),
-                          bottom: 32,
+                          top: dynamicPadding,
+                          bottom: dynamicPadding + 20.0,
                         ),
                         child: Center(
                           child: ConstrainedBox(
@@ -317,7 +325,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                 ),
 
-                                SizedBox(height: isDesktop ? 28 : 20),
+                                SizedBox(height: isDesktop ? 24 : 18),
 
                                 // ---- JUDUL UTAMA ----
                                 Text(
@@ -345,7 +353,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                 ),
 
-                                SizedBox(height: isDesktop ? 48 : 36),
+                                SizedBox(height: isDesktop ? 40 : 32),
 
                                 // ---- SEARCH BAR ----
                                 Container(
@@ -406,37 +414,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             _searchController.text,
                                           ),
                                           child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 8,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              gradient: const LinearGradient(
-                                                colors: [
-                                                  Color(0xFF7C3AED),
-                                                  Color(0xFF6366F1),
-                                                ],
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: const Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                SizedBox(width: 6),
-                                                Text(
-                                                  'Buat Kuis',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                  vertical: 8,
                                                 ),
-                                              ],
-                                            ),
-                                          ),
+                                                decoration: BoxDecoration(
+                                                  gradient: const LinearGradient(
+                                                    colors: [
+                                                      Color(0xFF7C3AED),
+                                                      Color(0xFF6366F1),
+                                                    ],
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: const Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.auto_awesome_rounded,
+                                                      color: Colors.white,
+                                                      size: 14,
+                                                    ),
+                                                    SizedBox(width: 6),
+                                                    Text(
+                                                      'Buat Kuis',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 13,
+                                                        fontWeight: FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                         ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
@@ -545,7 +558,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                 ),
 
-                                SizedBox(height: isDesktop ? 64 : 48),
+                                SizedBox(height: isDesktop ? 48 : 36),
 
                                 // ---- QUICK TOPIC CHIPS ----
                                 Wrap(
@@ -561,8 +574,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     _buildTopicChip('🧬 Biologi Sel'),
                                   ],
                                 ),
-
-                                const SizedBox(height: 32),
                               ],
                             ),
                           ),
