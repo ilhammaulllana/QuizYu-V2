@@ -40,7 +40,6 @@ function isValidGeminiApiKey(key) {
   if (
     trimmed === '' ||
     trimmed === 'YOUR_GEMINI_API_KEY_HERE' ||
-    trimmed.startsWith('AQ.') ||
     trimmed.length < 20
   ) {
     return false;
@@ -659,7 +658,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     console.log(`[PrepMaster API] Generating ${questionCount} questions on "${topic}" (${level}) using Gemini AI...`);
 
     let responseText = null;
-    const modelsToTry = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-pro'];
+    const modelsToTry = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
 
     for (const mName of modelsToTry) {
       try {
@@ -766,7 +765,7 @@ Pertahankan performa Anda atau coba tingkatkan kesulitan kuis Anda ke level beri
 
     console.log(`[PrepMaster API] Generating study guide for "${topic}" with ${incorrectQuestions.length} missed questions via Gemini...`);
 
-    const modelsToTry = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-pro'];
+    const modelsToTry = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
     let markdown = null;
 
     for (const mName of modelsToTry) {
