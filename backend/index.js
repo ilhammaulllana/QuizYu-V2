@@ -3,7 +3,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-dotenv.config();
+const path = require('path');
+
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 app.use(cors());
@@ -619,6 +621,21 @@ Berikut daftar kosakata penting yang sangat erat kaitannya dengan topik **${clea
 
 // ==================== ENDPOINTS ====================
 
+// Root & Health Check Endpoint (Berguna untuk testing di browser dan monitoring Vercel)
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'QuizYu PrepMaster AI API',
+    message: '🚀 Server backend berjalan lancar!',
+    gemini_configured: isValidGeminiApiKey(GEMINI_API_KEY),
+    endpoints: ['/api/generate-quiz', '/api/generate-study-guide']
+  });
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Endpoint 1: Membuat Kuis (POST /api/generate-quiz)
 app.post('/api/generate-quiz', async (req, res) => {
   try {
@@ -812,7 +829,12 @@ ${JSON.stringify(incorrectQuestions, null, 2)}`;
   }
 });
 
-// Jalankan Server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 PrepMaster Server berjalan di http://localhost:${PORT}`);
-});
+// Export Express app agar dapat dijalankan oleh Vercel
+module.exports = app;
+
+// Jalankan server lokal hanya saat development (node index.js / npm start)
+if (require.main === module) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 PrepMaster Server berjalan di http://localhost:${PORT}`);
+  });
+}
