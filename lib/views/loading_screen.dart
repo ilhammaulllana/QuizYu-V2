@@ -11,7 +11,7 @@ class GorgeousLoadingScreen extends ConsumerStatefulWidget {
 
   const GorgeousLoadingScreen({
     super.key,
-    this.title = 'Memproses Kuis AI',
+    this.title = 'Sabar Yaaa...',
     this.customMessages,
     this.onCancel,
     this.isScaffold = true,
