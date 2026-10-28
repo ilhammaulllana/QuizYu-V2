@@ -11,6 +11,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Normalisasi URL untuk Vercel Serverless Function (jika Vercel rewrite mengubah req.url)
+app.use((req, res, next) => {
+  const matchedPath = req.headers['x-matched-path'] || req.headers['x-vercel-matched-path'];
+  if (matchedPath) {
+    req.url = matchedPath;
+  }
+  next();
+});
+
 // Catch malformed JSON request bodies gracefully
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
@@ -637,7 +646,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Endpoint 1: Membuat Kuis (POST /api/generate-quiz)
-app.post('/api/generate-quiz', async (req, res) => {
+app.post(['/api/generate-quiz', '/generate-quiz'], async (req, res) => {
   try {
     const { topic, count, difficulty, modelVersion } = req.body;
     
@@ -755,7 +764,7 @@ app.post('/api/generate-quiz', async (req, res) => {
 });
 
 // Endpoint 2: Membuat Panduan Belajar (POST /api/generate-study-guide)
-app.post('/api/generate-study-guide', async (req, res) => {
+app.post(['/api/generate-study-guide', '/generate-study-guide'], async (req, res) => {
   try {
     const { topic, incorrectQuestions } = req.body;
 

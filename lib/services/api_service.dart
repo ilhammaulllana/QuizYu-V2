@@ -2,6 +2,8 @@ import 'dart:io' show Platform;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
 
+const String apiBaseUrl = 'https://quiz-yu-v2-cki8.vercel.app';
+
 class ApiService {
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
@@ -39,7 +41,13 @@ class ApiService {
     ));
   }
 
+  // URL Backend Produksi Vercel
+  static const bool _useLocalServer = false; // Ubah ke true jika ingin memakai server lokal
+
   String _getBaseUrl() {
+    if (!_useLocalServer) {
+      return apiBaseUrl;
+    }
     if (kIsWeb) {
       return 'http://localhost:3000';
     }
