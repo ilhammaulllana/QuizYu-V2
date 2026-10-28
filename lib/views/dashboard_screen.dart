@@ -139,7 +139,7 @@ class DashboardScreen extends ConsumerWidget {
     return Column(
       children: [
         Text(
-          'Kuis Selesai! 🎉',
+          'Kuis Selesai!',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: isMobile ? 26 : 30,
@@ -444,10 +444,6 @@ class DashboardScreen extends ConsumerWidget {
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.psychology_rounded, size: 22),
-
-            SizedBox(width: 10),
-
             Text(
               'Analisis Performa Saya',
               style: TextStyle(

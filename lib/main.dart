@@ -4,11 +4,7 @@ import 'theme/app_theme.dart';
 import 'views/main_navigation_wrapper.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: QuizyuApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: QuizyuApp()));
 }
 
 class QuizyuApp extends StatelessWidget {
@@ -17,7 +13,7 @@ class QuizyuApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'quizyu - AI Smart Quiz',
+      title: 'QuizYu - AI Smart Quiz',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,

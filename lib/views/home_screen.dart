@@ -198,8 +198,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const double navBarHeight = 64.0;
               final double freeSpace =
                   constraints.maxHeight - navBarHeight - estimatedContentHeight;
-              final double dynamicPadding =
-                  freeSpace > 0 ? (freeSpace / 2) : 16.0;
+              final double dynamicPadding = freeSpace > 0
+                  ? (freeSpace / 2)
+                  : 16.0;
 
               return SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -307,12 +308,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(
-                                        Icons.psychology_rounded,
-                                        size: 14,
-                                        color: Color(0xFF7C3AED),
-                                      ),
-                                      const SizedBox(width: 6),
                                       Text(
                                         'Powered by Google Gemini AI',
                                         style: TextStyle(
@@ -414,42 +409,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             _searchController.text,
                                           ),
                                           child: Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                  horizontal: 16,
-                                                  vertical: 8,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  gradient: const LinearGradient(
-                                                    colors: [
-                                                      Color(0xFF7C3AED),
-                                                      Color(0xFF6366F1),
-                                                    ],
-                                                    begin: Alignment.topLeft,
-                                                    end: Alignment.bottomRight,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                child: const Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.auto_awesome_rounded,
-                                                      color: Colors.white,
-                                                      size: 14,
-                                                    ),
-                                                    SizedBox(width: 6),
-                                                    Text(
-                                                      'Buat Kuis',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 13,
-                                                        fontWeight: FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 8,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                colors: [
+                                                  Color(0xFF7C3AED),
+                                                  Color(0xFF6366F1),
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
                                               ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: const Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SizedBox(width: 6),
+                                                Text(
+                                                  'Buat Kuis',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
@@ -623,7 +613,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-
 
   // ---- MODEL PILL ----
   Widget _buildModelPill({
