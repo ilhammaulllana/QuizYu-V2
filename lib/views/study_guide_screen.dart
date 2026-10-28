@@ -274,7 +274,7 @@ class StudyGuideScreen extends ConsumerWidget {
 
                               // LOADING
                               loading: () => const GorgeousLoadingScreen(
-                                title: 'Menyusun Analisis Performa',
+                                title: 'Sabar Yaaa...',
                                 customMessages: [
                                   'Menganalisis hasil jawaban Anda...',
                                   'Mengidentifikasi konsep & materi kunci...',

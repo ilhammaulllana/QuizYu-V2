@@ -13,7 +13,7 @@ class QuizyuApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'QuizYu - AI Smart Quiz',
+      title: 'quizyu - AI Smart Quiz',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
