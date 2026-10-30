@@ -1,12 +1,20 @@
-QuizYu is an AI-powered mobile app that can instantly transform any study topic into interactive quizzes and learning materials.
-Users simply type in the topic they wish to study (e.g., "Flutter State Management: 10 questions"),
-and the AI ​​system automatically generates multiple-choice questions complete with hints and explanations.
+An AI-powered learning platform designed to make learning more interactive and personalized. Built with Google Gemini AI, 
+QuizYu transforms any learning topic into interactive quizzes and personalized study guides, helping learners understand concepts and identify areas for improvement.
 
-Key Highlights:
-• Instant AI Quiz Generation with custom difficulty & question count.
-• Interactive hints & detailed answer explanations.
-• Dynamic Markdown Study Guide created from user's incorrect answers.
-• Robust Architecture: Node.js API Proxy, Multi-Model Fallback for API limits, and strict JSON Schema enforcement.
+QuizYu was created to make learning and practicing questions more accessible and engaging. 
+Originally inspired by the need for an easier way to practice psychometric and CPNS questions, the project evolved into an AI-powered learning platform.
+
+Users can simply enter a topic, and Gemini AI generates interactive multiple-choice quizzes along with personalized study guides. 
+The platform also helps learners understand their mistakes through AI-generated explanations.
+
+Key Features
+AI Quiz Generation — Generate multiple-choice quizzes from any learning topic.
+Personalized Study Guides — Get learning materials tailored to the selected topic.
+Answer Analysis — Understand incorrect answers through AI-generated explanations.
+Interactive Learning — Practice and learn through an engaging quiz experience.
+
+Built with Flutter for the frontend and Express.js for the backend, integrating Google Gemini AI to handle quiz and study guide generation. 
+Riverpod manages application state, while Dio handles API communication.
 
 Tech Stack:
 • Frontend: Flutter, Dart, Riverpod, Dio
