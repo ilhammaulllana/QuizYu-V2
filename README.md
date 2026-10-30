@@ -1,3 +1,6 @@
+QUIZYU
+https://quizyu-web.vercel.app/
+
 An AI-powered learning platform designed to make learning more interactive and personalized. Built with Google Gemini AI, 
 QuizYu transforms any learning topic into interactive quizzes and personalized study guides, helping learners understand concepts and identify areas for improvement.
 
