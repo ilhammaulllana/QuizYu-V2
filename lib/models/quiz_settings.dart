@@ -1,9 +1,9 @@
 class QuizSettings {
   final String topic;
-  final String modelVersion; // "Standard" or "Pro"
+  final String modelVersion; // "Standard" atau "Pro"
   final int questionCount;
   final String difficulty; // "Mudah", "Sedang", "Sulit"
-  final String focusArea; // "Semua topik" or "Peluang perbaikan"
+  final String focusArea; // "Semua topik" atau "Peluang perbaikan"
 
   const QuizSettings({
     this.topic = '',

@@ -3,12 +3,12 @@ import '../models/quiz_question.dart';
 import '../models/quiz_session.dart';
 import '../models/quiz_settings.dart';
 import '../services/api_service.dart';
-import '../services/mock_data.dart';
+
 
 class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
   QuizNotifier() : super(const AsyncValue.data(null));
 
-  /// Starts a new quiz session for the given topic, count, and difficulty.
+  /// Memulai sesi kuis baru berdasarkan topik, jumlah soal, dan tingkat kesulitan yang diberikan.
   Future<void> startQuiz({
     required String topic,
     required int count,
@@ -44,38 +44,13 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
 
       state = AsyncValue.data(session);
     } catch (e, stack) {
-      // Fallback lokal jika backend tidak dapat dihubungi atau mengalami kendala
-      try {
-        final mockResult = await MockDataService.generateQuiz(
-          topic: topic,
-          count: count,
-          difficulty: difficulty,
-        );
-        if (mockResult['is_valid'] == false) {
-          state = AsyncValue.error(mockResult['error_message'] ?? 'Topik tidak valid.', stack);
-          return;
-        }
-        final List<dynamic> questionsJson = mockResult['questions'] ?? [];
-        final questions = questionsJson.asMap().entries.map((entry) {
-          final idx = entry.key;
-          final json = entry.value;
-          return QuizQuestion.fromJson(json, 'q_mock_$idx');
-        }).toList();
-
-        final session = QuizSession(
-          questions: questions,
-          topic: mockResult['topic'] ?? topic,
-        );
-
-        state = AsyncValue.data(session);
-        return;
-      } catch (_) {}
-
-      state = AsyncValue.error('Terjadi kesalahan sistem: $e', stack);
+      // Tidak ada fallback lokal — langsung tampilkan pesan error ke pengguna
+      final errMsg = e.toString().replaceAll('Exception: ', '');
+      state = AsyncValue.error(errMsg, stack);
     }
   }
 
-  /// Records the user's selected answer for the current question.
+  /// Menyimpan jawaban yang dipilih pengguna untuk soal saat ini.
   void answerQuestion(int optionIndex) {
     final currentSession = state.value;
     if (currentSession == null || currentSession.isCompleted) return;
@@ -88,12 +63,12 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
     ));
   }
 
-  /// Skips the current question (leaves it unanswered).
+  /// Melewati soal saat ini (dibiarkan tidak terjawab).
   void skipQuestion() {
     final currentSession = state.value;
     if (currentSession == null || currentSession.isCompleted) return;
 
-    // Skipping doesn't add an entry to selectedAnswers, or we could explicitly remove it
+    // Melewati soal tidak menambahkan entri ke selectedAnswers, atau dihapus jika ada
     final updatedAnswers = Map<int, int>.from(currentSession.selectedAnswers);
     updatedAnswers.remove(currentSession.currentIndex);
 
@@ -102,7 +77,7 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
     ));
   }
 
-  /// Navigates to the next question or completes the quiz if it was the last question.
+  /// Berpindah ke soal berikutnya atau menyelesaikan kuis jika sudah di soal terakhir.
   void nextQuestion() {
     final currentSession = state.value;
     if (currentSession == null || currentSession.isCompleted) return;
@@ -118,7 +93,7 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
     }
   }
 
-  /// Navigates to the previous question.
+  /// Berpindah kembali ke soal sebelumnya.
   void previousQuestion() {
     final currentSession = state.value;
     if (currentSession == null || currentSession.isCompleted) return;
@@ -130,13 +105,13 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
     }
   }
 
-  /// Generates a new quiz session based on user settings (and includes previous mistakes if focused).
+  /// Menghasilkan sesi kuis baru berdasarkan pengaturan pengguna (dan menyertakan kesalahan sebelumnya jika difokuskan).
   Future<void> startCustomQuiz(QuizSettings settings) async {
     final prevSession = state.value;
     
-    // Check if we need to focus on weak topics / improvement
+    // Periksa apakah perlu fokus pada topik lemah / perbaikan
     if (settings.focusArea == 'Peluang perbaikan' && prevSession != null) {
-      // Find incorrect questions
+      // Temukan soal-soal yang salah dijawab
       final incorrect = prevSession.questions.where((q) {
         final ans = prevSession.selectedAnswers[prevSession.questions.indexOf(q)];
         return ans != q.correctAnswerIndex;
@@ -144,14 +119,13 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
 
       if (incorrect.isNotEmpty) {
         state = const AsyncValue.loading();
-        // Simulate loading
+        // Simulasi jeda loading
         await Future.delayed(const Duration(seconds: 2));
 
-        // Generate questions centered on those failed concepts
+        // Buat soal yang berpusat pada konsep-konsep yang salah
         List<QuizQuestion> newQuestions = [];
         
-        // Let's re-add the incorrect ones but shuffle them or tweak slightly,
-        // and pad with brand new questions on the same topic.
+        // Tambahkan kembali soal yang salah dan padukan dengan soal baru pada topik yang sama
         final topic = prevSession.topic;
         List<dynamic> rawQuestions = [];
         try {
@@ -167,20 +141,19 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
             return;
           }
           rawQuestions = res['questions'] ?? [];
-        } catch (_) {
-          final mockRes = await MockDataService.generateQuiz(
-            topic: topic,
-            count: settings.questionCount,
-            difficulty: settings.difficulty,
-          );
-          rawQuestions = mockRes['questions'] ?? [];
+        } catch (e) {
+            state = AsyncValue.error(
+              e.toString().replaceAll('Exception: ', ''),
+              StackTrace.current,
+            );
+            return;
         }
 
         final fetchedQuestions = rawQuestions.asMap().entries.map((entry) {
           return QuizQuestion.fromJson(entry.value, 'q_custom_${entry.key}');
         }).toList();
 
-        // Mix incorrect and some new ones
+        // Gabungkan soal yang salah dan beberapa soal baru
         newQuestions.addAll(incorrect.map((q) => QuizQuestion(
           id: 'q_retry_${q.id}',
           question: '[RETRY] ${q.question}',
@@ -190,16 +163,16 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
           explanation: 'Latihan ulang: ${q.explanation}',
         )));
 
-        // Pad with new ones until we hit the requested count
+        // Tambahkan soal baru hingga mencapai jumlah yang diminta
         for (var q in fetchedQuestions) {
           if (newQuestions.length >= settings.questionCount) break;
-          // Avoid duplicate text questions if possible
+          // Hindari duplikasi pertanyaan jika memungkinkan
           if (!newQuestions.any((element) => element.question.contains(q.question))) {
             newQuestions.add(q);
           }
         }
 
-        // Shuffle questions so it feels fresh
+        // Acak urutan soal agar terasa baru
         newQuestions.shuffle();
 
         state = AsyncValue.data(QuizSession(
@@ -210,7 +183,7 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
       }
     }
 
-    // Default: Start a fresh normal quiz
+    // Default: Mulai sesi kuis standar baru
     await startQuiz(
       topic: settings.topic.isNotEmpty ? settings.topic : (prevSession?.topic ?? 'Umum'),
       count: settings.questionCount,
@@ -219,7 +192,7 @@ class QuizNotifier extends StateNotifier<AsyncValue<QuizSession?>> {
     );
   }
 
-  /// Resets the quiz session to null (returns to the Zero-State home screen).
+  /// Mereset sesi kuis menjadi null (kembali ke layar utama / Zero-State).
   void resetQuiz() {
     state = const AsyncValue.data(null);
   }

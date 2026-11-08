@@ -32,7 +32,7 @@ class StudyGuideScreen extends ConsumerWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // HEADER
+              // HEADER / BAGIAN ATAS
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 28,
@@ -82,7 +82,7 @@ class StudyGuideScreen extends ConsumerWidget {
                 ),
               ),
 
-              // MAIN CONTENT
+              // KONTEN UTAMA
               Expanded(
                 child: Center(
                   child: ConstrainedBox(
@@ -94,7 +94,7 @@ class StudyGuideScreen extends ConsumerWidget {
                       ),
                       child: Column(
                         children: [
-                          // GUIDE CONTENT
+                          // KONTEN PANDUAN BELAJAR
                           Expanded(
                             child: guideState.when(
                               data: (markdownText) {
@@ -231,7 +231,7 @@ class StudyGuideScreen extends ConsumerWidget {
 
                                     const SizedBox(height: 16),
 
-                                    // FINISH BUTTON
+                                    // TOMBOL SELESAI
                                     SizedBox(
                                       width: double.infinity,
                                       height: 54,
@@ -272,7 +272,7 @@ class StudyGuideScreen extends ConsumerWidget {
                                 );
                               },
 
-                              // LOADING
+                              // SEDANG MEMUAT (LOADING)
                               loading: () => const GorgeousLoadingScreen(
                                 title: 'Sabar Yaaa...',
                                 customMessages: [
@@ -285,7 +285,7 @@ class StudyGuideScreen extends ConsumerWidget {
                                 isScaffold: false,
                               ),
 
-                              // ERROR
+                              // KONDISI ERROR
                               error: (error, stack) {
                                 final rawMsg = error.toString().replaceAll(
                                   'Exception: ',

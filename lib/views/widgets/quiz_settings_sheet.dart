@@ -27,18 +27,18 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
   }
 
   void _submit() {
-    // 1. Update the settings provider
+    // 1. Perbarui settings provider
     ref.read(settingsProvider.notifier).setFocusArea(_focusArea);
     ref.read(settingsProvider.notifier).setQuestionCount(_questionCount);
     ref.read(settingsProvider.notifier).setDifficulty(_difficulty);
 
-    // 2. Fetch the updated settings
+    // 2. Ambil pengaturan yang telah diperbarui
     final updatedSettings = ref.read(settingsProvider);
 
-    // 3. Trigger follow up quiz generation
+    // 3. Picu pembuatan kuis lanjutan
     ref.read(quizProvider.notifier).startCustomQuiz(updatedSettings);
 
-    // 4. Close bottom sheet
+    // 4. Tutup lembar bawah (bottom sheet)
     Navigator.of(context).pop();
   }
 
@@ -54,7 +54,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
         top: 10,
       ),
       decoration: const BoxDecoration(
-        color: Colors.white, // Clean white sheet
+        color: Colors.white, // Lembar putih bersih
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         border: Border(
           top: BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
@@ -65,7 +65,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Drag handle indicator
+            // Indikator pegangan seret
             Center(
               child: Container(
                 width: 48,
@@ -90,7 +90,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
             ),
             const SizedBox(height: 24),
 
-            // Section 1: Focus Area
+            // Bagian 1: Fokus Soal
             const Text(
               '🎯 Fokus Soal',
               style: TextStyle(
@@ -123,7 +123,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
             ),
             const SizedBox(height: 24),
 
-            // Section 2: Question Count
+            // Bagian 2: Jumlah Soal
             const Text(
               '🔢 Jumlah Soal',
               style: TextStyle(
@@ -189,7 +189,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
                         setState(() {
                           _isCustom = true;
                           if (_questionCount == 5 || _questionCount == 10 || _questionCount == 20) {
-                            _questionCount = 15; // Set default custom value to 15
+                            _questionCount = 15; // Setel nilai kustom bawaan menjadi 15
                           }
                         });
                       },
@@ -281,7 +281,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
             ],
             const SizedBox(height: 24),
 
-            // Section 3: Difficulty Level
+            // Bagian 3: Tingkat Kesulitan
             const Text(
               '⚡ Tingkat Kesulitan',
               style: TextStyle(
@@ -341,7 +341,7 @@ class _QuizSettingsSheetState extends ConsumerState<QuizSettingsSheet> {
             ),
             const SizedBox(height: 36),
 
-            // Submit Button
+            // Tombol Kirim / Mulai
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),

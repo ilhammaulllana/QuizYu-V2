@@ -58,7 +58,7 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
       }
     });
 
-    // Show cancel button if loading takes longer than 60 seconds (1 minute)
+    // Tampilkan tombol batal jika loading berlangsung lebih dari 60 detik (1 menit)
     _cancelTimer = Timer(const Duration(seconds: 60), () {
       if (mounted) {
         setState(() {
@@ -87,8 +87,8 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
           center: Alignment.center,
           radius: 1.0,
           colors: [
-            Color(0xFFEBF5FF), // Subtle blue in the center
-            Colors.white, // Pure white at the edges
+            Color(0xFFEBF5FF), // Biru lembut di bagian tengah
+            Colors.white, // Putih bersih di bagian tepi
           ],
           stops: [0.0, 0.8],
         ),
@@ -97,7 +97,7 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Outer rotating neon glow
+            // Kilau neon berputar luar
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
@@ -141,7 +141,7 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
               },
             ),
             const SizedBox(height: 40),
-            // Glowing main loading text
+            // Teks loading utama berkilau
             ShaderMask(
               shaderCallback: (bounds) => const LinearGradient(
                 colors: [Color(0xFF7F5AF0), Color(0xFF9061F9)],
@@ -157,7 +157,7 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
               ),
             ),
             const SizedBox(height: 16),
-            // Animated cycling message
+            // Pesan berganti teranimasi
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               transitionBuilder: (child, animation) => FadeTransition(
@@ -177,14 +177,14 @@ class _GorgeousLoadingScreenState extends ConsumerState<GorgeousLoadingScreen>
                 key: ValueKey<int>(_messageIndex),
                 style: const TextStyle(
                   fontSize: 15,
-                  color: Color(0xFF64748B), // Muted slate gray text
+                  color: Color(0xFF64748B), // Teks abu-abu muted
                   fontStyle: FontStyle.italic,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 32),
-            // Small loading dot indicators
+            // Indikator titik loading kecil
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(3, (index) {

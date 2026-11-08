@@ -3,7 +3,7 @@ import 'quiz_question.dart';
 class QuizSession {
   final List<QuizQuestion> questions;
   final int currentIndex;
-  final Map<int, int> selectedAnswers; // maps questionIndex -> selectedOptionIndex
+  final Map<int, int> selectedAnswers; // pemetaan indeksSoal -> indeksOpsiDipilih
   final bool isCompleted;
   final String topic;
 
@@ -45,7 +45,7 @@ class QuizSession {
   }
 
   int get skippedCount {
-    // If the quiz is completed, skipped is total questions minus answered questions
+    // Jika kuis telah selesai, jumlah dilewati adalah total soal dikurangi soal yang dijawab
     return totalQuestions - selectedAnswers.length;
   }
 

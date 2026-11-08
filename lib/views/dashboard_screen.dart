@@ -32,7 +32,7 @@ class DashboardScreen extends ConsumerWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             // ============================================================
-            // RESPONSIVE WIDTH
+            // LEBAR RESPONSIF
             // ============================================================
 
             final screenWidth = constraints.maxWidth;
@@ -69,7 +69,7 @@ class DashboardScreen extends ConsumerWidget {
                       SizedBox(height: isMobile ? 28 : 36),
 
                       // ==================================================
-                      // ACCURACY CARD
+                      // KARTU AKURASI
                       // ==================================================
                       _buildAccuracyCard(
                         context: context,
@@ -82,7 +82,7 @@ class DashboardScreen extends ConsumerWidget {
                       SizedBox(height: isMobile ? 16 : 20),
 
                       // ==================================================
-                      // STATISTICS
+                      // STATISTIK
                       // ==================================================
                       _buildStatistics(
                         context: context,
@@ -95,7 +95,7 @@ class DashboardScreen extends ConsumerWidget {
                       SizedBox(height: isMobile ? 32 : 40),
 
                       // ==================================================
-                      // PRIMARY ACTION
+                      // AKSI UTAMA
                       // ==================================================
                       _buildPrimaryButton(
                         context: context,
@@ -107,7 +107,7 @@ class DashboardScreen extends ConsumerWidget {
                       const SizedBox(height: 12),
 
                       // ==================================================
-                      // SECONDARY ACTION
+                      // AKSI SEKUNDER
                       // ==================================================
                       _buildSecondaryButton(
                         context: context,
@@ -117,7 +117,7 @@ class DashboardScreen extends ConsumerWidget {
                       SizedBox(height: isMobile ? 20 : 28),
 
                       // ==================================================
-                      // BACK TO HOME
+                      // KEMBALI KE BERANDA
                       // ==================================================
                       _buildHomeButton(context: context, ref: ref),
                     ],
@@ -208,7 +208,7 @@ class DashboardScreen extends ConsumerWidget {
       child: Column(
         children: [
           // ================================================================
-          // CIRCULAR PROGRESS
+          // PROGRES MELINGKAR
           // ================================================================
           SizedBox(
             width: gaugeSize,
@@ -259,7 +259,7 @@ class DashboardScreen extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // ================================================================
-          // SCORE
+          // SKOR AKHIR
           // ================================================================
           Text(
             'Skor Anda',
@@ -287,7 +287,7 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   // =========================================================================
-  // STATISTICS
+  // STATISTIK
   // =========================================================================
 
   Widget _buildStatistics({
@@ -339,7 +339,7 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   // =========================================================================
-  // STAT CARD
+  // KARTU STATISTIK
   // =========================================================================
 
   Widget _buildStatCard({
@@ -399,7 +399,7 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   // =========================================================================
-  // PRIMARY BUTTON
+  // TOMBOL UTAMA
   // =========================================================================
 
   Widget _buildPrimaryButton({
@@ -459,7 +459,7 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   // =========================================================================
-  // SECONDARY BUTTON
+  // TOMBOL SEKUNDER
   // =========================================================================
 
   Widget _buildSecondaryButton({
@@ -507,7 +507,7 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   // =========================================================================
-  // HOME BUTTON
+  // TOMBOL BERANDA
   // =========================================================================
 
   Widget _buildHomeButton({

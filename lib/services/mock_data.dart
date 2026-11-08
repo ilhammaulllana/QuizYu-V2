@@ -5,20 +5,20 @@ import '../models/quiz_question.dart';
 class MockDataService {
   static final Random _random = Random();
 
-  /// Simulates calling the backend endpoint `POST /generate-quiz`.
-  /// If the topic is invalid or gibberish, it returns a validation error.
-  /// Otherwise, it returns a structured JSON map.
+  /// Simulasi pemanggilan endpoint backend `POST /generate-quiz`.
+  /// Jika topik tidak valid atau teks acak, mengembalikan pesan validasi error.
+  /// Jika valid, mengembalikan map JSON terstruktur.
   static Future<Map<String, dynamic>> generateQuiz({
     required String topic,
     required int count,
     required String difficulty,
   }) async {
-    // Simulate network delay
+    // Simulasi jeda jaringan
     await Future.delayed(const Duration(seconds: 2));
 
     final normalizedTopic = topic.trim().toLowerCase();
 
-    // Check for gibberish/invalid inputs
+    // Periksa apakah input berupa teks acak atau tidak valid
     if (normalizedTopic.isEmpty ||
         normalizedTopic.length < 3 ||
         _isGibberish(normalizedTopic)) {
@@ -28,10 +28,10 @@ class MockDataService {
       };
     }
 
-    // Generate questions
+    // Buat pertanyaan kuis
     List<Map<String, dynamic>> questions = [];
 
-    // Check if we have pre-defined high-quality questions for the topic
+    // Periksa apakah ada bank soal berkualitas tinggi untuk topik ini
     if (normalizedTopic.contains('flutter') || normalizedTopic.contains('dart')) {
       questions = _getFlutterQuestions(count, difficulty);
     } else if (normalizedTopic.contains('kopi') || normalizedTopic.contains('coffee')) {
@@ -41,15 +41,15 @@ class MockDataService {
     } else if (normalizedTopic.contains('sejarah') || normalizedTopic.contains('indonesia')) {
       questions = _getHistoryQuestions(count, difficulty);
     } else {
-      // Fallback: Generate dynamic generic questions themed with the user's topic
+      // Fallback: Buat pertanyaan generik dinamis berdasarkan topik pengguna
       questions = _generateGenericQuestions(topic, count, difficulty);
     }
 
-    // Ensure we return exactly the requested count
+    // Pastikan mengembalikan tepat sesuai jumlah yang diminta
     if (questions.length > count) {
       questions = questions.sublist(0, count);
     } else if (questions.length < count) {
-      // If we don't have enough, pad with generic questions
+      // Jika kurang, padukan dengan pertanyaan generik
       final extraNeeded = count - questions.length;
       final extra = _generateGenericQuestions(topic, extraNeeded, difficulty);
       questions.addAll(extra);

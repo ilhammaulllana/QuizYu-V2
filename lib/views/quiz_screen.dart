@@ -6,7 +6,7 @@ class QuizScreen extends ConsumerWidget {
   const QuizScreen({super.key});
 
   // ============================================================
-  // EXIT CONFIRMATION
+  // KONFIRMASI KELUAR
   // ============================================================
   void _showExitConfirmation(BuildContext context, WidgetRef ref) {
     showDialog(
@@ -64,7 +64,7 @@ class QuizScreen extends ConsumerWidget {
   }
 
   // ============================================================
-  // MAIN BUILD
+  // BUILD UTAMA
   // ============================================================
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -95,7 +95,7 @@ class QuizScreen extends ConsumerWidget {
     final selectedAnswerIndex = session.selectedAnswers[questionIdx];
 
     // ============================================================
-    // RESPONSIVE BREAKPOINT
+    // BREAKPOINT RESPONSIF
     // ============================================================
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -124,7 +124,7 @@ class QuizScreen extends ConsumerWidget {
           backgroundColor: const Color(0xFFF8FAFC),
 
           // ======================================================
-          // APP BAR
+          // BILAH APLIKASI (APP BAR)
           // ======================================================
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(isMobile ? 70 : 78),
@@ -161,7 +161,7 @@ class QuizScreen extends ConsumerWidget {
 
                                 SizedBox(width: isMobile ? 8 : 12),
 
-                                // Info quiz
+                                // Informasi kuis
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +196,7 @@ class QuizScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    // Progress bar mengikuti lebar content
+                    // Bilah progres mengikuti lebar konten
                     Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 900),
@@ -227,7 +227,7 @@ class QuizScreen extends ConsumerWidget {
           ),
 
           // ======================================================
-          // BODY
+          // BAGIAN UTAMA (BODY)
           // ======================================================
           body: Column(
             children: [
@@ -244,7 +244,7 @@ class QuizScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           // ======================================
-                          // QUESTION CARD
+                          // KARTU SOAL
                           // ======================================
                           Container(
                             padding: EdgeInsets.all(isMobile ? 18 : 24),
@@ -279,14 +279,14 @@ class QuizScreen extends ConsumerWidget {
                           SizedBox(height: isMobile ? 14 : 18),
 
                           // ======================================
-                          // HINT
+                          // PETUNJUK
                           // ======================================
                           HintAccordion(hintText: currentQuestion.hint),
 
                           SizedBox(height: isMobile ? 20 : 28),
 
                           // ======================================
-                          // ANSWER OPTIONS
+                          // PILIHAN JAWABAN
                           // ======================================
                           ...List.generate(currentQuestion.options.length, (
                             index,
@@ -312,7 +312,7 @@ class QuizScreen extends ConsumerWidget {
                           }),
 
                           // ======================================
-                          // EXPLANATION
+                          // PENJELASAN
                           // ======================================
                           if (isAnswered) ...[
                             SizedBox(height: isMobile ? 8 : 12),
@@ -365,7 +365,7 @@ class QuizScreen extends ConsumerWidget {
                             ),
                           ],
 
-                          // Extra space before bottom bar.
+                          // Ruang ekstra sebelum bilah bawah.
                           const SizedBox(height: 8),
                         ],
                       ),
@@ -375,7 +375,7 @@ class QuizScreen extends ConsumerWidget {
               ),
 
               // ==================================================
-              // BOTTOM CONTROL BAR
+              // BILAH KONTROL BAWAH
               // ==================================================
               Container(
                 width: double.infinity,
@@ -418,7 +418,7 @@ class QuizScreen extends ConsumerWidget {
   }
 
   // ============================================================
-  // BOTTOM BUTTON
+  // TOMBOL BAWAH
   // ============================================================
   Widget _buildBottomButton({
     required BuildContext context,
@@ -500,7 +500,7 @@ class QuizScreen extends ConsumerWidget {
   }
 
   // ============================================================
-  // ANSWER OPTION CARD
+  // KARTU OPSI JAWABAN
   // ============================================================
   Widget _buildOptionCard({
     required BuildContext context,
@@ -524,7 +524,7 @@ class QuizScreen extends ConsumerWidget {
     Widget suffixIcon = const SizedBox.shrink();
 
     // ==========================================================
-    // ANSWER STATE
+    // STATUS JAWABAN
     // ==========================================================
     if (isAnswered) {
       if (index == correctIndex) {
@@ -550,7 +550,7 @@ class QuizScreen extends ConsumerWidget {
     }
 
     // ==========================================================
-    // OPTION CARD
+    // KARTU OPSI
     // ==========================================================
     return GestureDetector(
       onTap: isAnswered
@@ -579,7 +579,7 @@ class QuizScreen extends ConsumerWidget {
         child: Row(
           children: [
             // ==================================================
-            // LETTER
+            // HURUF OPSI
             // ==================================================
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
@@ -604,7 +604,7 @@ class QuizScreen extends ConsumerWidget {
             SizedBox(width: isMobile ? 12 : 16),
 
             // ==================================================
-            // OPTION TEXT
+            // TEKS OPSI
             // ==================================================
             Expanded(
               child: Text(
@@ -623,7 +623,7 @@ class QuizScreen extends ConsumerWidget {
             const SizedBox(width: 8),
 
             // ==================================================
-            // STATUS ICON
+            // IKON STATUS
             // ==================================================
             suffixIcon,
           ],
@@ -634,7 +634,7 @@ class QuizScreen extends ConsumerWidget {
 }
 
 // ===============================================================
-// HINT ACCORDION
+// AKORDION PETUNJUK
 // ===============================================================
 class HintAccordion extends StatefulWidget {
   final String hintText;
@@ -669,7 +669,7 @@ class _HintAccordionState extends State<HintAccordion>
         child: Column(
           children: [
             // ====================================================
-            // HINT HEADER
+            // HEADER PETUNJUK
             // ====================================================
             InkWell(
               onTap: () {
@@ -719,7 +719,7 @@ class _HintAccordionState extends State<HintAccordion>
             ),
 
             // ====================================================
-            // HINT CONTENT
+            // KONTEN PETUNJUK
             // ====================================================
             AnimatedCrossFade(
               firstChild: const SizedBox.shrink(),

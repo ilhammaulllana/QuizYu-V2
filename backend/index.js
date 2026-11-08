@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Catch malformed JSON request bodies gracefully
+// Tangani format JSON request body yang rusak secara aman
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
     console.error('⚠️ [PrepMaster API] Malformed JSON in request body:', err.message);
@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-// Prevent server process crashes from unhandled promise rejections or uncaught exceptions
+// Cegah proses server crash akibat unhandled promise rejection atau uncaught exception
 process.on('uncaughtException', (err) => {
   console.error('⚠️ [PrepMaster API] Uncaught Exception:', err);
 });
@@ -73,7 +73,7 @@ function isNetworkError(err) {
   const msg = (err.message || err.toString() || '').toLowerCase();
   const code = (err.code || '').toLowerCase();
 
-  // Exclude SDK/API validation or key errors
+  // Kecualikan error validasi SDK/API atau error kunci API
   if (msg.includes('api key') || msg.includes('bad request') || msg.includes('invalid') || msg.includes('400') || msg.includes('403')) {
     return false;
   }
@@ -510,7 +510,7 @@ function generateGenericQuestions(topic, count, level) {
     }
   ];
 
-  // Shuffle and pick elements
+  // Acak dan ambil elemen pertanyaan
   const shuffled = [...templates].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
@@ -562,7 +562,7 @@ function generateFallbackQuiz(topic, count, level) {
     questions = generateGenericQuestions(topic, count, level);
   }
 
-  // Shuffle questions order
+  // Acak urutan pertanyaan
   questions = questions.sort(() => 0.5 - Math.random());
 
   if (questions.length < count) {
@@ -673,11 +673,13 @@ app.post(['/api/generate-quiz', '/generate-quiz'], async (req, res) => {
 
     const level = difficulty || 'Sedang';
 
-    // Jika API Key belum dikonfigurasi atau tidak valid, gunakan Smart Fallback Generator langsung
+    // Jika API Key belum dikonfigurasi atau tidak valid, kembalikan error
     if (!isValidGeminiApiKey(GEMINI_API_KEY) || !genAI) {
-      console.log(`[PrepMaster API] ℹ️ Menggunakan Smart Fallback Generator untuk topik "${topic}" (${questionCount} soal, ${level})...`);
-      const fallbackResult = generateFallbackQuiz(topic, questionCount, level);
-      return res.json(fallbackResult);
+      console.log(`[PrepMaster API] ❌ API Key Gemini tidak valid atau belum dikonfigurasi.`);
+      return res.status(503).json({
+        is_valid: false,
+        error_message: '[SYSTEM_ERROR] API Key Gemini belum dikonfigurasi di server. Hubungi administrator.'
+      });
     }
 
     // Jika API Key valid, coba panggil Google Gemini AI
@@ -709,16 +711,18 @@ app.post(['/api/generate-quiz', '/generate-quiz'], async (req, res) => {
       }
     }
 
-    // Jika Gemini gagal (misal kuota habis, rate limit, atau error jaringan), gunakan fallback generator
+    // Jika Gemini gagal (misal kuota habis, rate limit, atau error jaringan), kembalikan error
     if (!responseText) {
-      console.warn('[PrepMaster API] ⚠️ Seluruh model Gemini tidak dapat dijangkau. Mengaktifkan Smart Fallback Generator...');
-      const fallbackResult = generateFallbackQuiz(topic, questionCount, level);
-      return res.json(fallbackResult);
+      console.warn('[PrepMaster API] ⚠️ Seluruh model Gemini tidak dapat dijangkau.');
+      return res.status(503).json({
+        is_valid: false,
+        error_message: '[SYSTEM_ERROR] Semua model Gemini AI sedang tidak tersedia. Silakan coba lagi nanti.'
+      });
     }
 
     let sanitizedText = responseText.trim();
     
-    // Extract JSON object from first '{' to last '}'
+    // Ekstrak objek JSON dari tanda kurung kurawal '{' pertama hingga '}' terakhir
     const firstBrace = sanitizedText.indexOf('{');
     const lastBrace = sanitizedText.lastIndexOf('}');
     if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
@@ -757,9 +761,10 @@ app.post(['/api/generate-quiz', '/generate-quiz'], async (req, res) => {
     return res.json(quizData);
   } catch (error) {
     console.error('[PrepMaster API] Error generating quiz:', error);
-    // Fallback jika terjadi error runtime tidak terduga
-    const fallbackResult = generateFallbackQuiz(req.body.topic || 'Umum', parseInt(req.body.count) || 10, req.body.difficulty || 'Sedang');
-    return res.json(fallbackResult);
+    return res.status(500).json({
+      is_valid: false,
+      error_message: '[SYSTEM_ERROR] Terjadi kesalahan sistem saat membuat kuis. Silakan coba lagi.'
+    });
   }
 });
 
@@ -772,11 +777,10 @@ app.post(['/api/generate-study-guide', '/generate-study-guide'], async (req, res
       return res.status(400).send("Parameter 'topic' diperlukan.");
     }
 
-    // Jika API Key belum valid, gunakan Fallback Study Guide Generator
+    // Jika API Key belum valid, kembalikan error
     if (!isValidGeminiApiKey(GEMINI_API_KEY) || !genAI) {
-      console.log(`[PrepMaster API] ℹ️ Menggunakan Smart Fallback Study Guide untuk "${topic}"...`);
-      const fallbackGuide = generateFallbackStudyGuide(topic, incorrectQuestions);
-      return res.send(fallbackGuide);
+      console.log(`[PrepMaster API] ❌ API Key Gemini tidak valid untuk study guide.`);
+      return res.status(503).send('[SYSTEM_ERROR] API Key Gemini belum dikonfigurasi di server. Hubungi administrator.');
     }
 
     if (!incorrectQuestions || !Array.isArray(incorrectQuestions) || incorrectQuestions.length === 0) {
@@ -817,8 +821,8 @@ ${JSON.stringify(incorrectQuestions, null, 2)}`;
     }
 
     if (!markdown) {
-      console.warn('[PrepMaster API] Mengaktifkan Fallback Study Guide Generator...');
-      return res.send(generateFallbackStudyGuide(topic, incorrectQuestions));
+      console.warn('[PrepMaster API] ⚠️ Seluruh model Gemini tidak dapat dijangkau untuk study guide.');
+      return res.status(503).send('[SYSTEM_ERROR] Semua model Gemini AI sedang tidak tersedia untuk membuat panduan belajar. Silakan coba lagi nanti.');
     }
 
     // Pembersihan markdown wrapper jika ada
@@ -834,7 +838,7 @@ ${JSON.stringify(incorrectQuestions, null, 2)}`;
     return res.send(markdown.trim());
   } catch (error) {
     console.error('[PrepMaster API] Error generating study guide:', error);
-    return res.send(generateFallbackStudyGuide(req.body?.topic || 'Umum', req.body?.incorrectQuestions || []));
+    return res.status(500).send('[SYSTEM_ERROR] Terjadi kesalahan sistem saat membuat panduan belajar. Silakan coba lagi.');
   }
 });
 

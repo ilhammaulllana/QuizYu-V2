@@ -87,12 +87,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Breakpoints
+    // Titik henti responsif (Breakpoints)
     final bool isDesktop = screenWidth >= 1024;
     final bool isTablet = screenWidth >= 600 && screenWidth < 1024;
     final bool isMobile = screenWidth < 600;
 
-    // Responsive values
+    // Nilai-nilai responsif
     final double horizontalPadding = isDesktop ? 0 : (isTablet ? 48.0 : 24.0);
     final double maxContentWidth = isDesktop
         ? 560.0
@@ -103,7 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final double logoIconSize = isDesktop ? 28.0 : (isTablet ? 24.0 : 18.0);
     final double logoTextSize = isDesktop ? 28.0 : (isTablet ? 24.0 : 20.0);
 
-    // Listen for error changes in quizState and show snackbar
+    // Dengarkan perubahan error pada quizState dan tampilkan snackbar
     ref.listen<AsyncValue>(quizProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stackTrace) {
@@ -209,7 +209,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Column(
                     children: [
                       // ===============================================
-                      // TOP NAV BAR
+                      // BILAH NAVIGASI ATAS
                       // ===============================================
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -219,7 +219,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // ---- TEXT LOGO (kiri) ----
+                            // ---- LOGO TEKS (kiri) ----
                             ShaderMask(
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
@@ -235,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
 
-                            // ---- LOGO ICON (kanan) ----
+                            // ---- IKON LOGO (kanan) ----
                             Container(
                               width: logoSize,
                               height: logoSize,
@@ -270,7 +270,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
 
                       // ===============================================
-                      // HERO CONTENT (Centered Vertically - Search bar in the middle)
+                      // KONTEN HERO (Tengah Vertikal - Bilah Pencarian di tengah)
                       // ===============================================
                       Padding(
                         padding: EdgeInsets.only(
@@ -287,7 +287,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                // ---- BADGE ----
+                                // ---- LENCANA (BADGE) ----
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 14,
@@ -337,7 +337,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                                 SizedBox(height: isDesktop ? 16 : 12),
 
-                                // ---- SUBTITLE ----
+                                // ---- SUBJUDUL ----
                                 Text(
                                   'Ketik topik apa saja, Gemini AI akan membuatkan\nkuis interaktif dan panduan belajar khusus untuk kamu.',
                                   textAlign: TextAlign.center,
@@ -350,7 +350,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                                 SizedBox(height: isDesktop ? 40 : 32),
 
-                                // ---- SEARCH BAR ----
+                                // ---- BILAH PENCARIAN ----
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
@@ -467,7 +467,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                                 const SizedBox(height: 20),
 
-                                // ---- MODEL SWITCHER ----
+                                // ---- PENGALIH MODEL ----
                                 Container(
                                   padding: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
@@ -550,7 +550,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                                 SizedBox(height: isDesktop ? 48 : 36),
 
-                                // ---- QUICK TOPIC CHIPS ----
+                                // ---- CHIP TOPIK CEPAT ----
                                 Wrap(
                                   alignment: WrapAlignment.center,
                                   spacing: 8,
@@ -580,7 +580,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // ---- TOPIC CHIP ----
+  // ---- CHIP TOPIK ----
   Widget _buildTopicChip(String label) {
     return GestureDetector(
       onTap: () {
@@ -614,7 +614,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // ---- MODEL PILL ----
+  // ---- PIL MODEL ----
   Widget _buildModelPill({
     required String label,
     required bool isSelected,

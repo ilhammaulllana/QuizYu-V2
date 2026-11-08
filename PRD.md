@@ -1,7 +1,6 @@
 # Product Requirements Document — Quizyu
 
-**Versi dokumen:** 2.0  
-**Tanggal pembaruan:** 2 November 2026  
+**Versi dokumen:** 2.0    
 **Status produk:** MVP fungsional / prototipe yang dapat dijalankan  
 **Sumber:** pemeriksaan kode aplikasi Flutter, backend Express, konfigurasi proyek, dan dokumentasi repositori.
 

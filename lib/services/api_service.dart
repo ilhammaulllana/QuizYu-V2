@@ -24,7 +24,7 @@ class ApiService {
       ),
     );
 
-    // Add logger interceptor for debugging
+    // Tambahkan logger interceptor untuk debugging
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         debugPrint('[API Request] ${options.method} ${options.path}');
@@ -51,14 +51,14 @@ class ApiService {
     if (kIsWeb) {
       return 'http://localhost:3000';
     }
-    // Android emulator loops back to localhost via 10.0.2.2
+    // Emulator Android mengakses localhost via 10.0.2.2
     if (Platform.isAndroid) {
       return 'http://10.0.2.2:3000';
     }
     return 'http://localhost:3000';
   }
 
-  /// Helper to extract clean user-friendly network and offline error messages.
+  /// Fungsi bantuan untuk mengekstrak pesan error jaringan dan offline yang ramah pengguna.
   String _parseDioError(DioException e) {
     if (e.type == DioExceptionType.connectionError ||
         e.type == DioExceptionType.connectionTimeout ||
@@ -102,7 +102,7 @@ class ApiService {
     return '[SYSTEM_ERROR] Terjadi kesalahan sistem: $cleanMsg';
   }
 
-  /// Calls POST /api/generate-quiz to get a list of structured questions.
+  /// Memanggil POST /api/generate-quiz untuk mendapatkan daftar pertanyaan terstruktur.
   Future<Map<String, dynamic>> generateQuiz({
     required String topic,
     required int count,
@@ -131,7 +131,7 @@ class ApiService {
     }
   }
 
-  /// Calls POST /api/generate-study-guide to generate a Markdown guide based on wrong answers.
+  /// Memanggil POST /api/generate-study-guide untuk membuat panduan belajar Markdown berdasarkan jawaban salah.
   Future<String> generateStudyGuide({
     required String topic,
     required List<Map<String, dynamic>> incorrectQuestions,
@@ -144,7 +144,7 @@ class ApiService {
           'incorrectQuestions': incorrectQuestions,
         },
         options: Options(
-          responseType: ResponseType.plain, // Return text/markdown directly
+          responseType: ResponseType.plain, // Kembalikan teks/markdown langsung
         ),
       );
 

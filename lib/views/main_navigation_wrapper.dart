@@ -13,7 +13,7 @@ class MainNavigationWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final quizState = ref.watch(quizProvider);
 
-    // Listen for error state globally in navigation wrapper so snackbar & logs are never missed
+    // Dengarkan status error secara global di wrapper navigasi agar snackbar & log tidak terlewatkan
     ref.listen<AsyncValue>(quizProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stackTrace) {
